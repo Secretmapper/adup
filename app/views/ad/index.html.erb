@@ -1,0 +1,114 @@
+<div class="container" ng-app="receta" ng-controller="DemoCtrl">
+  <div class="panel panel-success">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3">
+          Name:
+        </div>
+        <div class="col-md-3">
+          Price Range:
+        </div>
+        <div class="col-md-3">
+          Gender:
+        </div>
+        <div class="col-md-3">
+          Categories:
+        </div>
+      </div>
+      <form class="form-inline row">
+        <div class="form-group col-md-3">
+          <input class="form-control" type="text" placeholder="Details" autofocus ng-model="name">
+        </div>
+        <div class="form-group col-md-3" style="min-width:200px;">
+          <div range-slider min="0" max="20000" model-min="priceRange.min" model-max="priceRange.max"></div>
+        </div>
+        <div class="form-group col-md-3">
+          <div style="margin-top:10px;">
+            <input type="radio" ng-model="gender" value=""> None
+            <input type="radio" ng-model="gender" value="M">  Male
+            <input type="radio" ng-model="gender" value="F"> Female
+          </div>
+        </div>
+        <select class="form-control col-md-3" ng-model="activeCategory" ng-options="category.id as category.name for category in categories">
+          <option value=""> Choose Category </option>
+        </select>
+      </form>
+      <button class="btn btn-default" ng-click="openForm()">Post an Ad</button>
+    </div>
+  </div>
+  <div class="row" style="margin:0 auto;">
+    <div masonry>
+        <div class="masonry-brick" ng-repeat="brick in bricks |filter: {name:name} | filter:{category_id:activeCategory} | filter:{gender:gender} | filter:priceRangeFilter">
+            <img style="max-width:200px;margin-bottom: 20px;margin-right:20px;cursor:pointer"
+              ng-src="{{ brick.src }}" ng-click="open(brick)" alt="A masonry brick">
+        </div>
+    </div>
+  </div>
+
+   <script type="text/ng-template" id="myModalContent.html">
+      <div class="modal-header">
+          <h3 class="modal-title" ng-bind="selected.item.name"></h3>
+      </div>
+      <div class="modal-body">
+          <img style="max-width:75%;" ng-src="{{ selected.item.src }}" alt="A masonry brick">
+          <p ng-bind="selected.item.description"></p>
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-primary" ng-click="ok()">OK</button>
+          <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+      </div>
+  </script>
+  <script type="text/ng-template" id="myModalContent2.html">
+    <div ng-if="!submitted">
+      <form role="form"  ng-submit="submit()">
+        <div class="modal-header">
+            <h3 class="modal-title">Post an Ad</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Name of Advertisement</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Advertisement Name">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description for Advertisement</label>
+              <textarea class="form-control" rows="3" placeholder="Short Description of Advertisement"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputFile">Submit Advertisement</label>
+              <input type="file" id="exampleInputFile">
+              <p class="help-block">Make sure your image is eye-catching! </p>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Price</label>
+              <input type="number" class="form-control" id="exampleInputEmail1" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Contact No.</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="######">
+            </div>
+            <div class="radio">
+              <label>
+                <input name="gender" type="radio" value="" checked="checked"> None
+              </label>
+              <label>
+                <input name="gender" type="radio" value="M">  Male
+              </label>
+              <label>
+                <input name="gender" type="radio" value="F"> Female
+              </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-default">Submit</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <div ng-if="submitted">
+      <div class="modal-body">
+        <h2>Congrats! Your ad is now up for review!</h2>
+      </div>
+    </div>
+  </script>
+
+</div>
